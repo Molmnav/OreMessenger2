@@ -17,6 +17,8 @@ try {
     $pdo = new PDO("mysql:host=$host;port=$port;dbname=$dbname;charset=utf8", $user, $pass, [
         PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION
     ]);
+
+    $pdo->exec("SET time_zone = '+02:00'");
 } catch (PDOException $e) {
     die("Error conexión BD: " . $e->getMessage());
 }

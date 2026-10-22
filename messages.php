@@ -10,6 +10,8 @@ require_once 'src/api/conexion.php';
 
 if (isset($_SESSION['username'])) {
 
+    $accion = $_POST['accion'] ?? "";
+
     $username = $_SESSION['username'];
 
     $mensajes = $pdo->prepare('SELECT * FROM message WHERE username = ?');
@@ -17,6 +19,19 @@ if (isset($_SESSION['username'])) {
     $mensajes->execute([$username]);
 
     $resultadoMensajes = $mensajes->fetchAll(PDO::FETCH_ASSOC);
+
+    if ($accion == 'Logout'){
+        session_start();
+        $_SESSION = [];
+        session_destroy();
+
+        header("Location: http://localhost:8080/src/api/index.php");
+        exit();
+    }
+
+    if ($accion == 'crearMensaje'){
+        header("Location: http://localhost:8080/new.php");
+    }
 
 } else {
     header('Location: src/api/index.php');
@@ -101,8 +116,10 @@ if (isset($_SESSION['username'])) {
 
     </table>
 
-    <p><button class="volver"><a href="http://localhost:8080/src/api/Logout.php">Volver a Logearte</a></button>
-        | <button class="CreasMensajes">Crear Mensaje</button></p>
+    <form action="" METHOD="post">
+        <p><button type="submit" name="accion" value="Logout">Volver a Logearte</button>
+            | <button type="submit" name="accion" value="crearMensaje">Crear Mensaje</button></p>
+    </form>
 
     <?php
 
